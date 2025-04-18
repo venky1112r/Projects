@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -7,10 +8,12 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const [showSSO, setShowSSO] = useState(false);
 
+  const navigate = useNavigate();
+
   const validateForm = () => {
     const newErrors = {};
     if (!email) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Invalid email format";
+    else if ( !/\S+@\S+\.\S+/.test(email)) newErrors.email = "Invalid email format";
 
     if (!password) newErrors.password = "Password is required";
 
@@ -23,6 +26,11 @@ const Login = () => {
     if (validateForm()) {
       setShowSSO(true);
     }
+  };
+
+  const handleSSOLogin = () => {
+    setShowSSO(false);
+    navigate("/dashboard" , { state: { email } });
   };
 
   return (
@@ -84,6 +92,7 @@ const Login = () => {
                 className="btn btn-success w-100"
                 onClick={() => {
                   console.log("Redirecting to SSO...");
+                  handleSSOLogin();
                   // window.location.href = "https://your-sso-provider.com/auth";
                 }}
               >
